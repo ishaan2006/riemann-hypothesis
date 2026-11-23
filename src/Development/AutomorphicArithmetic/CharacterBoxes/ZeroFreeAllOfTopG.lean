@@ -49,6 +49,10 @@ namespace UpperTheory.Top
 
 open Formalism.BasicNotions Formalism.MainNotions Formalism.HC GlobalTheory.EX
 
+/-- The family-level bridge hypothesis: for any window exponent `la > 1` and family request `G`,
+existence of host windows (`HostExW la G.req`) together with the `Sha`-window hypothesis `HypV`
+on every family in `G.cls la` yields `FamilyClassConnected (G.cls la)`, producing a family
+satisfying the `x^(1/2 + O(eps))` one-sided Chebyshev bound on windows. -/
 def TopG : Prop :=
   ∀ (la : ℝ) (G : FReq), 1 < la → HostExW la G.req →
     (∀ {eps : ℝ} (Fm : FamP eps), G.cls la Fm → HypV Fm.toFamCore) → FamilyClassConnected (G.cls la)
@@ -63,6 +67,10 @@ theorem eFamC_of_cls (ψ : PChar) (la : ℝ) {eps : ℝ} (Fm : FamP eps) (h : (G
   rw [Fm.L_x x i (by linarith), Fm.L_eps x i] at h1
   exact h1
 
+/-- Deduces `ZeroFreeAll` (every primitive Dirichlet `L`-function is zero-free for `Re s > 1/2`)
+from `TopG` and host-window existence `HostExW la (GChi ψ).req` for each primitive character `ψ`.
+For each `ψ`, `TopG` supplies a family satisfying the one-sided Chebyshev bound on windows
+`[Y, Y^la]`, which `zeroFreeOn_of_tiedWin_cyc` feeds into the windowed Landau theorem. -/
 theorem zeroFreeAll_of_topG {la : ℝ} (hla : 1 < la) (h : TopG) (hS : ∀ ψ : PChar, HostExW la (GChi ψ).req) : ZeroFreeAll := by
   have key : ZeroFreeOn fun _ => True :=
     zeroFreeOn_of_tiedWin_cyc (Fam := FamP) (core := fun Fm => Fm.toFamCore) (Tied := fun Fm => ChainTied Fm) hla

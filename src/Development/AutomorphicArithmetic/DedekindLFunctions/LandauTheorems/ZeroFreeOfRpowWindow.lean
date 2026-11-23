@@ -49,6 +49,9 @@ noncomputable section
 
 namespace Deduction
 
+/-- If the one-sided Chebyshev quantity `Gm F y` satisfies `Gm F y ≤ C * y ^ θ` on arbitrarily
+large multiplicative windows `[Y, Y ^ (1 + δ)]` (with `0 < θ < 1` and `δ > 0`), then every
+`L`-function in the character family `F` has no zeros with `Re s > θ`. -/
 theorem zeroFree_of_rpow_window (F : CharFamily) {θ δ C : ℝ} (hθ : 0 < θ) (hθ1 : θ < 1) (hδ : 0 < δ)
     (h : ∀ Y₀ : ℝ, ∃ Y : ℝ, Y₀ ≤ Y ∧ ∀ y ∈ Set.Icc Y (Y ^ (1 + δ)), Gm F y ≤ C * y ^ θ) :
     ZeroFree F θ :=

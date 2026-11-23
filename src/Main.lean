@@ -40,17 +40,26 @@ import Mathlib.Tactic.NormNum.RealSqrt
 
 @[expose] public section
 
+/-- Generalized Riemann Hypothesis (right half-plane): every Dirichlet `L`-function `L(χ, s)`
+has no zeros with `1/2 < Re s`, except for the pole of the trivial character at `s = 1`.
+Proved by `UpperTheory.FinalTheorems.everyCharacter`. -/
 theorem LFunction_ne_zero_of_half_lt_re : DirichletLNonvanishingRightOfHalf :=
   UpperTheory.FinalTheorems.everyCharacter
 
+/-- Mathlib's `RiemannHypothesis`, deduced from `LFunction_ne_zero_of_half_lt_re` via the
+trivial character (`Claim.zeta`). -/
 theorem riemannHypothesis : RiemannHypothesis :=
   Claim.zeta LFunction_ne_zero_of_half_lt_re
 
+/-- Every nontrivial zero of `riemannZeta` in the critical strip `0 < Re s < 1` lies on `Re s = 1/2`. -/
 theorem riemannZeta_eq_zero_re : RiemannZetaZerosOnLine := riemannHypothesis
 
+/-- Every zero of a Dirichlet `L`-function in `0 < Re s < 1` lies on `Re s = 1/2`, deduced from
+`LFunction_ne_zero_of_half_lt_re` and the functional equation (`Claim.strip`). -/
 theorem LFunction_eq_zero_re : DirichletLZerosOnLine :=
   Claim.strip LFunction_ne_zero_of_half_lt_re
 
+/-- Specialization of `LFunction_eq_zero_re` to primitive Dirichlet characters. -/
 theorem LFunction_eq_zero_re_of_isPrimitive : PrimitiveDirichletLZerosOnLine := by
   intro N _ χ _ s h₀ h₁ hz
   exact LFunction_eq_zero_re N χ s h₀ h₁ hz

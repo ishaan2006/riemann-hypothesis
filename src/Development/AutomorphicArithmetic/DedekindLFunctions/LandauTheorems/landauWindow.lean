@@ -59,6 +59,9 @@ noncomputable section
 
 namespace Deduction
 
+/-- Contradiction step for the windowed Landau argument: if `0 < d < e ≤ E`, then a lower bound
+`c / d ^ k` cannot be dominated by `M / e ^ k + C * exp (η * U) / E ^ k` for arbitrarily small
+`η > 0` and arbitrarily large `U ≤ k`. -/
 theorem landau_window_contra {c d e E M C : ℝ} (hc : 0 < c) (hd : 0 < d) (hde : d < e) (heE : e ≤ E)
     (H : ∀ η : ℝ, 0 < η → ∀ U₀ : ℝ, ∃ U : ℝ, U₀ ≤ U ∧ ∃ k : ℕ, U ≤ k ∧
       c / d ^ k ≤ M / e ^ k + C * Real.exp (η * U) / E ^ k) : False := by
@@ -79,6 +82,10 @@ theorem landau_window_contra {c d e E M C : ℝ} (hc : 0 < c) (hd : 0 < d) (hde 
       = |M| * Real.exp (η * U) / e ^ k + |C| * Real.exp (η * U) / e ^ k := by ring
   linarith
 
+/-- Key Taylor-coefficient upper bound from the one-sided window hypothesis `WindowHypU g θ δ`:
+for a suitable `σ > 2`, arbitrarily small `η > 0`, and arbitrarily large `U ≤ k`, the combined
+modulus/real-part Taylor coefficient `‖a_k(σ + iγ)‖ + Re a_k(σ)` of `Φ` is bounded by
+`C * exp (η * U) / (σ - θ) ^ k`, uniformly in `γ ∈ ℝ`. -/
 theorem landau_window_key {g : ℝ → ℝ} {Φ : ℂ → ℂ} {Z : Set ℂ} (hP : PoleData g Φ Z) {θ δ : ℝ}
     (hθ : 0 < θ) (hθ1 : θ < 1) (hδ : 0 < δ) (hW : WindowHypU g θ δ) :
     ∃ σ : ℝ, 2 < σ ∧ ∃ C : ℝ, ∀ η : ℝ, 0 < η → ∀ U₀ : ℝ, ∃ U : ℝ, U₀ ≤ U ∧ ∃ k : ℕ, U ≤ k ∧ ∀ γ : ℝ,
@@ -122,6 +129,15 @@ theorem landau_window_re_pos {z w : ℂ} {r : ℝ} (hr : r ≤ z.re) (hw : w ∈
   simp only [Complex.sub_re] at h3
   linarith
 
+/-- Windowed Landau theorem: if `Φ` has pole data `hP` with pole set `Z` and its Mellin density `g`
+satisfies the one-sided window bound `WindowHypU g θ δ` on arbitrarily large intervals
+`[U, (1 + δ) * U]`, then every pole `ρ ∈ Z` satisfies `Re ρ ≤ θ`.
+
+By `landau_dichotomy`, any pole with `Re ρ₀ > θ` produces either:
+1. a pole-free disk around `σ` of radius `D` and a nearest off-axis pole `ρ` at distance `d < D`,
+   where `landau_pole_asym` at `σ + iγ` and `landau_cauchy` at `σ` contradict `landau_window_key`; or
+2. a real pole `β > θ` with positive residue, where `landau_pole_asym` at `σ` directly contradicts
+   `landau_window_key` with `γ = 0`. -/
 theorem landau_window {g : ℝ → ℝ} {Φ : ℂ → ℂ} {Z : Set ℂ} (hP : PoleData g Φ Z) {θ δ : ℝ}
     (hθ : 0 < θ) (hθ1 : θ < 1) (hδ : 0 < δ) (hW : WindowHypU g θ δ) : ∀ ρ ∈ Z, ρ.re ≤ θ := by
   intro ρ₀ h₀

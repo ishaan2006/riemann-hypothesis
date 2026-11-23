@@ -41,6 +41,13 @@ import Mathlib.Tactic.NormNum.RealSqrt
 
 @[expose] public section
 
+/-- Deduces `UpperTheory.EveryCharacter` (non-vanishing of `L(χ, s)` for `Re s > 1/2` for all
+Dirichlet characters `χ`) from a Galois-representation / local-global compatibility package `Row0b`
+parametrized by the weak local parameter assignment `IsRecT`.
+
+The proof feeds `h` into both the `Sha`-window construction (`vwin_of_row`) and the literature
+assembly (`every_character_of_literature_of_vWin`), supplying `recTExists` for the local
+parameter slot. -/
 theorem UpperTheory.FinalTheorems.everyCharacter_of_row
     (h : UpperTheory.GalStar.Row0b fun h rc => UpperTheory.Zero.LLC.IsRecT h rc) :
     UpperTheory.EveryCharacter :=
@@ -50,5 +57,7 @@ theorem UpperTheory.FinalTheorems.everyCharacter_of_row
       galoisRepOfPolarizedPairLit := h }
     (UpperTheory.One.vwin_of_row h)
 
+/-- Unconditional proof of `UpperTheory.EveryCharacter` by discharging `Row0b` with
+`galoisLocalGlobalStrong_recParameter`. -/
 theorem UpperTheory.FinalTheorems.everyCharacter : UpperTheory.EveryCharacter :=
   UpperTheory.FinalTheorems.everyCharacter_of_row UpperTheory.Gal.Int.galoisLocalGlobalStrong_recParameter
